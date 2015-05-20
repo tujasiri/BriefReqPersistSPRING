@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.example.org/MinimalExample"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <itemDefinition id="_sItem" structureRef="String" />
+
+  <itemDefinition id="_2_InMessageType" structureRef="java.lang.String" />
+  <message id="_2_InMessage" itemRef="_2_InMessageType" />
+  <interface id="_2_ServiceInterface" name="com.sample.BriefVerify" implementationRef="" >
+    <operation id="_2_ServiceOperation" name="downloadBrief" implementationRef="" >
+      <inMessageRef>_2_InMessage</inMessageRef>
+    </operation>
+  </interface>
+
+  <itemDefinition id="_jbpm-unique-0_InMessageType" structureRef="java.lang.String" />
+  <message id="_jbpm-unique-0_InMessage" itemRef="_jbpm-unique-0_InMessageType" />
+  <interface id="_jbpm-unique-0_ServiceInterface" name="com.sample.BriefVerify" implementationRef="" >
+    <operation id="_jbpm-unique-0_ServiceOperation" name="checkCertOfInterestedPersons" implementationRef="" >
+      <inMessageRef>_jbpm-unique-0_InMessage</inMessageRef>
+    </operation>
+  </interface>
+
+  <process processType="Private" isExecutable="true" id="ServiceProcess" name="Service Process" >
+
+    <!-- process variables -->
+    <property id="s" itemSubjectRef="_sItem"/>
+
+    <!-- nodes -->
+    <startEvent id="_1" name="StartProcess"  isInterrupting="true"/>
+    <serviceTask id="_2" name="Download Brief" operationRef="_2_ServiceOperation" implementation="Other" >
+      <ioSpecification>
+        <dataInput id="_2_param" name="Parameter" />
+        <dataOutput id="_2_result" name="Result" />
+        <inputSet>
+          <dataInputRefs>_2_param</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_2_result</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>s</sourceRef>
+        <targetRef>_2_param</targetRef>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_2_result</sourceRef>
+        <targetRef>s</targetRef>
+      </dataOutputAssociation>
+    </serviceTask>
+    <endEvent id="_3" name="EndProcess" >
+        <terminateEventDefinition />
+    </endEvent>
+    <serviceTask id="_jbpm-unique-0" name="Check Cert" operationRef="_jbpm-unique-0_ServiceOperation" implementation="Other" >
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-0_param" name="Parameter" />
+        <dataOutput id="_jbpm-unique-0_result" name="Result" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-0_param</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-0_result</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+    </serviceTask>
+
+    <!-- connections -->
+    <sequenceFlow id="_1-_2" sourceRef="_1" targetRef="_2" />
+    <sequenceFlow id="_jbpm-unique-0-_3" sourceRef="_jbpm-unique-0" targetRef="_3" />
+    <sequenceFlow id="_2-_jbpm-unique-0" sourceRef="_2" targetRef="_jbpm-unique-0" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="ServiceProcess" >
+      <bpmndi:BPMNShape bpmnElement="_1" >
+        <dc:Bounds x="72" y="147" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_2" >
+        <dc:Bounds x="255" y="150" width="116" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_3" >
+        <dc:Bounds x="862" y="149" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-0" >
+        <dc:Bounds x="504" y="148" width="209" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_1-_2" >
+        <di:waypoint x="96" y="171" />
+        <di:waypoint x="313" y="174" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-0-_3" >
+        <di:waypoint x="608" y="172" />
+        <di:waypoint x="886" y="173" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_2-_jbpm-unique-0" >
+        <di:waypoint x="313" y="174" />
+        <di:waypoint x="608" y="172" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:g="http://www.jboss.org/drools/flow/gpd" xmlns:tns="http://www.jboss.org/drools" xmlns="http://www.jboss.org/drools" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd" id="Definition" expressionLanguage="http://www.mvel.org/2.0" targetNamespace="http://www.example.org/MinimalExample" typeLanguage="http://www.java.com/javaTypes">
+  <bpmn2:itemDefinition id="_sItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="_2_InMessageType" structureRef="java.lang.String"/>
+  <bpmn2:itemDefinition id="_jbpm-unique-0_InMessageType" structureRef="java.lang.String"/>
+  <bpmn2:signal id="Signal_1" name="SignalNode2"/>
+  <bpmn2:message id="_2_InMessage" itemRef="_2_InMessageType" name="_2_InMessage"/>
+  <bpmn2:message id="_jbpm-unique-0_InMessage" itemRef="_jbpm-unique-0_InMessageType" name="_jbpm-unique-0_InMessage"/>
+  <bpmn2:interface id="_2_ServiceInterface" implementationRef="" name="com.sample.BriefVerify">
+    <bpmn2:operation id="_2_ServiceOperation" implementationRef="" name="downloadBrief">
+      <bpmn2:inMessageRef>_2_InMessage</bpmn2:inMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:interface id="_jbpm-unique-0_ServiceInterface" implementationRef="" name="com.sample.BriefVerify">
+    <bpmn2:operation id="_jbpm-unique-0_ServiceOperation" implementationRef="" name="checkCertOfInterestedPersons">
+      <bpmn2:inMessageRef>_jbpm-unique-0_InMessage</bpmn2:inMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:process id="ServiceProcess" tns:version="1" tns:packageName="defaultPackage" tns:adHoc="false" name="Service Process" isExecutable="true" processType="Private">
+    <bpmn2:property id="s" itemSubjectRef="_sItem"/>
+    <bpmn2:startEvent id="_1" name="StartProcess">
+      <bpmn2:outgoing>_1-_2</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:serviceTask id="_2" name="Download Brief" implementation="Other" operationRef="_2_ServiceOperation">
+      <bpmn2:incoming>_1-_2</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="InputOutputSpecification_1">
+        <bpmn2:dataInput id="_2_param" name="Parameter"/>
+        <bpmn2:dataOutput id="_2_result" name="Result"/>
+        <bpmn2:inputSet id="InputSet_1">
+          <bpmn2:dataInputRefs>_2_param</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="OutputSet_1">
+          <bpmn2:dataOutputRefs>_2_result</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation id="DataInputAssociation_1">
+        <bpmn2:sourceRef>s</bpmn2:sourceRef>
+        <bpmn2:targetRef>_2_param</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation id="DataOutputAssociation_1">
+        <bpmn2:sourceRef>_2_result</bpmn2:sourceRef>
+        <bpmn2:targetRef>s</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:endEvent id="_3" name="EndProcess">
+      <bpmn2:incoming>_jbpm-unique-0-_3</bpmn2:incoming>
+      <bpmn2:terminateEventDefinition id="TerminateEventDefinition_1"/>
+    </bpmn2:endEvent>
+    <bpmn2:serviceTask id="_jbpm-unique-0" name="Check Cert" implementation="Other" operationRef="_jbpm-unique-0_ServiceOperation">
+      <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
+      <bpmn2:outgoing>_jbpm-unique-0-_3</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="InputOutputSpecification_2">
+        <bpmn2:dataInput id="_jbpm-unique-0_param" name="Parameter"/>
+        <bpmn2:dataOutput id="_jbpm-unique-0_result" name="Result"/>
+        <bpmn2:inputSet id="InputSet_2">
+          <bpmn2:dataInputRefs>_jbpm-unique-0_param</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="OutputSet_2">
+          <bpmn2:dataOutputRefs>_jbpm-unique-0_result</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+    </bpmn2:serviceTask>
+    <bpmn2:sequenceFlow id="_1-_2" tns:priority="1" name="" sourceRef="_1" targetRef="_2"/>
+    <bpmn2:sequenceFlow id="_jbpm-unique-0-_3" tns:priority="1" name="" sourceRef="_jbpm-unique-0" targetRef="_3"/>
+    <bpmn2:sequenceFlow id="SequenceFlow_1" tns:priority="1" sourceRef="_2" targetRef="IntermediateCatchEvent_1"/>
+    <bpmn2:intermediateCatchEvent id="IntermediateCatchEvent_1" name="signalNode">
+      <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
+      <bpmn2:dataOutput id="DataOutput_1" itemSubjectRef="_sItem" name="Signal_1_Output"/>
+      <bpmn2:dataOutputAssociation id="DataOutputAssociation_2">
+        <bpmn2:sourceRef>DataOutput_1</bpmn2:sourceRef>
+        <bpmn2:targetRef>s</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      <bpmn2:outputSet id="OutputSet_3" name="Output Set 3">
+        <bpmn2:dataOutputRefs>DataOutput_1</bpmn2:dataOutputRefs>
+      </bpmn2:outputSet>
+      <bpmn2:signalEventDefinition id="SignalEventDefinition_1" signalRef="Signal_1"/>
+    </bpmn2:intermediateCatchEvent>
+    <bpmn2:sequenceFlow id="SequenceFlow_2" tns:priority="1" sourceRef="IntermediateCatchEvent_1" targetRef="_jbpm-unique-0"/>
+    <bpmn2:eventBasedGateway id="EventBasedGateway_1" name="" gatewayDirection="Diverging"/>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_Process_1" bpmnElement="ServiceProcess">
+      <bpmndi:BPMNShape id="BPMNShape_StartEvent_1" bpmnElement="_1">
+        <dc:Bounds height="48.0" width="48.0" x="72.0" y="147.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_ServiceTask_1" bpmnElement="_2">
+        <dc:Bounds height="48.0" width="116.0" x="255.0" y="150.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_EndEvent_1" bpmnElement="_3">
+        <dc:Bounds height="48.0" width="48.0" x="862.0" y="149.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_ServiceTask_2" bpmnElement="_jbpm-unique-0">
+        <dc:Bounds height="48.0" width="209.0" x="504.0" y="148.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_IntermediateCatchEvent_1" bpmnElement="IntermediateCatchEvent_1">
+        <dc:Bounds height="36.0" width="36.0" x="417.0" y="153.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_EventBasedGateway_1" bpmnElement="EventBasedGateway_1">
+        <dc:Bounds height="50.0" width="50.0" x="75.0" y="465.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_1" bpmnElement="_1-_2" sourceElement="BPMNShape_StartEvent_1" targetElement="BPMNShape_ServiceTask_1">
+        <di:waypoint xsi:type="dc:Point" x="96.0" y="171.0"/>
+        <di:waypoint xsi:type="dc:Point" x="313.0" y="174.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_2" bpmnElement="_jbpm-unique-0-_3" sourceElement="BPMNShape_ServiceTask_2" targetElement="BPMNShape_EndEvent_1">
+        <di:waypoint xsi:type="dc:Point" x="608.0" y="172.0"/>
+        <di:waypoint xsi:type="dc:Point" x="886.0" y="173.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_4" bpmnElement="SequenceFlow_1" sourceElement="BPMNShape_ServiceTask_1" targetElement="BPMNShape_IntermediateCatchEvent_1">
+        <di:waypoint xsi:type="dc:Point" x="371.0" y="174.0"/>
+        <di:waypoint xsi:type="dc:Point" x="391.0" y="174.0"/>
+        <di:waypoint xsi:type="dc:Point" x="391.0" y="171.0"/>
+        <di:waypoint xsi:type="dc:Point" x="417.0" y="171.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_5" bpmnElement="SequenceFlow_2" sourceElement="BPMNShape_IntermediateCatchEvent_1" targetElement="BPMNShape_ServiceTask_2">
+        <di:waypoint xsi:type="dc:Point" x="453.0" y="171.0"/>
+        <di:waypoint xsi:type="dc:Point" x="475.0" y="171.0"/>
+        <di:waypoint xsi:type="dc:Point" x="475.0" y="172.0"/>
+        <di:waypoint xsi:type="dc:Point" x="504.0" y="172.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

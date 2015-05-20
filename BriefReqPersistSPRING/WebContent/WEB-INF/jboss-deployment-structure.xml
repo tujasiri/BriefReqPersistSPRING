@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<jboss-deployment-structure>
+	<ear-subdeployments-isolated>true</ear-subdeployments-isolated>  
+	<deployment>
+		<exclude-subsystems>
+			<subsystem name="weld"/>
+			<subsystem name="jaxrs" />  
+      		<subsystem name="webservices" />
+		</exclude-subsystems>
+	</deployment>
+	<!--
+	<sub-deployment name="BriefReqPersistSPRING.war">
+		<exclude-subsystems>
+			<subsystem name="weld"/>
+			<subsystem name="jaxrs" />  
+      		<subsystem name="webservices" />
+		</exclude-subsystems>
+		<exclusions>
+	      <module name="org.jboss.weld" />
+	    </exclusions>
+	</sub-deployment>
+	-->
+</jboss-deployment-structure>
